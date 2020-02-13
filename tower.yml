@@ -1,0 +1,16 @@
+---
+apiVersion: tower.ansible.com/v1alpha1
+kind: Tower
+metadata:
+  name: tower
+  namespace: tower
+spec:
+  tower_hostname: tower.test
+  tower_secret_key: Netapp1!
+
+  tower_admin_user: admin
+  tower_admin_email: administrator@demo.netapp.com
+  tower_admin_password: Netapp1!
+
+  tower_task_image: ansible/awx_task:9.0.1
+  tower_web_image: ansible/awx_web:9.0.1
