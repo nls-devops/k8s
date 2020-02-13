@@ -1,0 +1,23 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-gold-east
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=gold; geography=east"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-silver-east
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=silver; geography=east"
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: solidfire-bronze-east
+provisioner: csi.trident.netapp.io
+parameters:
+  selector: "performance=bronze; geography=east"

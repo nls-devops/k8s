@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-import-manage-sf
+spec:
+  volumes:
+    - name: pvc-volumeimport-manage-sf-vol
+      persistentVolumeClaim:
+       claimName: pvc-volumeimport-manage-sf
+  containers:
+    - name: task-pv-container
+      image: alpine:3.2
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+      volumeMounts:
+        - mountPath: "/data"
+          name: pvc-volumeimport-manage-sf-vol

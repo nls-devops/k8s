@@ -1,0 +1,9 @@
+apiVersion: snapshot.storage.k8s.io/v1alpha1
+kind: VolumeSnapshot
+metadata:
+  name: persistent-volume-claim-sf-snap
+spec:
+  snapshotClassName: csi-snapclass-sf
+  source:
+    name: persistent-volume-claim-sf
+    kind: PersistentVolumeClaim

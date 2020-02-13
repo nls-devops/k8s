@@ -1,0 +1,9 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-volumeimport-manage
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: storage-class-nas

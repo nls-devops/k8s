@@ -1,0 +1,29 @@
+{
+    "version": 1,
+    "storageDriverName": "solidfire-san",
+    "backendName": "BackendForSolidFireWest",
+    "Endpoint": "https://admin:Netapp1!@192.168.1.105/json-rpc/8.0",
+    "SVIP": "192.168.1.135:3260",
+    "TenantName": "trident",
+    "UseCHAP": true,
+    "InitiatorIFace": "default",
+    "Types": [{"Type": "Gold", "Qos": {"minIOPS": 5000, "maxIOPS": 10000, "burstIOPS": 12000}},
+	      {"Type": "Silver", "Qos": {"minIOPS": 50, "maxIOPS": 5000, "burstIOPS": 5000}},
+              {"Type": "Bronze", "Qos": {"minIOPS": 50, "maxIOPS": 1000, "burstIOPS": 1000}}],
+    "region": "us-west",
+    "type": "Bronze",
+    "labels":{"platform":"solidfire", "geography":"west"},
+    "storage": [
+        {
+            "labels":{"performance":"gold"},
+            "type":"Gold"
+        },
+        {
+            "labels":{"performance":"silver"},
+            "type":"Silver"
+        },
+        {
+            "labels":{"performance":"bronze"},
+        }
+    ]
+}

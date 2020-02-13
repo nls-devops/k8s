@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-from-sf-snap
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: sf-gold
+  resources:
+    requests:
+      storage: 2Gi
+  dataSource:
+    name: persistent-volume-claim-sf-snap
+    kind: VolumeSnapshot
+    apiGroup: snapshot.storage.k8s.io
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pvpod-sf-clone
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+       claimName: pvc-from-sf-snap
+  containers:
+    - name: task-pv-container
+      image: alpine:3.2
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+      volumeMounts:
+        - mountPath: "/data"
+          name: task-pv-storage

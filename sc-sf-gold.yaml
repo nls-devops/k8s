@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: sf-gold
+provisioner: csi.trident.netapp.io
+parameters:
+  backendType: "solidfire-san"
+  IOPS: "10000"
+

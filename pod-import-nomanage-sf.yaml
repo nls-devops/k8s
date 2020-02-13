@@ -1,0 +1,19 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-import-nomanage-sf
+spec:
+  volumes:
+    - name: pvc-volumeimport-nomanage-sf-vol
+      persistentVolumeClaim:
+       claimName: pvc-volumeimport-nomanage-sf
+  containers:
+    - name: task-pv-container
+      image: alpine:3.2
+      command:
+        - /bin/sh
+        - "-c"
+        - "sleep 60m"
+      volumeMounts:
+        - mountPath: "/data"
+          name: pvc-volumeimport-nomanage-sf-vol
