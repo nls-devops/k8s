@@ -6,9 +6,9 @@ spec:
   ports:
     - port: 80
       targetPort: 9876
-      name: HTTP
+      name: webapp.demo.netapp.com
     - port: 443
       targetPort: 9877
-      name: HTTPS
+      name: secure.demo.netapp.com
   selector:
     app: webapp
