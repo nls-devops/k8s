@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: redis-django
+  name: redango
   labels:
     app: web
 spec:
@@ -14,3 +14,4 @@ spec:
       image: django
       ports:
         - containerPort: 8000
+  restartPolicy: Always
