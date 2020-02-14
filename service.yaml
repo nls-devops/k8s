@@ -6,7 +6,9 @@ spec:
   ports:
     - port: 80
       targetPort: 9876
+      name: HTTP
     - port: 443
       targetPort: 9877
+      name: HTTPS
   selector:
     app: webapp
