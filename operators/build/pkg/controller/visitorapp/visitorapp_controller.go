@@ -46,26 +46,29 @@ func add(mgr manager.Manager, r reconcile.Reconciler) error {
 		return err
 	}
 
-	// Watch for changes to primary resource VisitorApp
+	// Watch for changes to primary resource VisitorApp (the CRD associated with this operator)
 	err = c.Watch(&source.Kind{Type: &examplev1.VisitorApp{}}, &handler.EnqueueRequestForObject{})
 	if err != nil {
 		return err
 	}
 
+	/* REMOVED TO ADD CUSTOM WATCH LOGIC
 	// TODO(user): Modify this to be the types you create that are owned by the primary resource
 	// Watch for changes to secondary resource Pods and requeue the owner VisitorApp
-	/*
-	   	// REMOVED TO ADD CUSTOM WATCH LOGIC
-	    	err = c.Watch(&source.Kind{Type: &corev1.Pod{}}, &handler.EnqueueRequestForOwner{
-	   		IsController: true,
-	   		OwnerType:    &examplev1.VisitorApp{},
-	   	})
-	   	if err != nil {
-	   		return err
-	   	}
 
+	err = c.Watch(&source.Kind{Type: &corev1.Pod{}}, &handler.EnqueueRequestForOwner{
+	   	IsController: true,
+	   	OwnerType:    &examplev1.VisitorApp{},
+	})
+	if err != nil {
+	   	return err
+	}
 	*/
 
+	// Watch for changes to secondary resources (resources created by the operator)
+	// In this case, it a Deployment and Service with the owner as this primary resource
+	// Don't want to watch for all Deployments and Services
+	// Might want to add Secrets, Role, RoleBinding, and ServiceAccount?
 	err = c.Watch(&source.Kind{Type: &appsv1.Deployment{}}, &handler.EnqueueRequestForOwner{
 		IsController: true,
 		OwnerType:    &examplev1.VisitorApp{},
@@ -103,12 +106,20 @@ type ReconcileVisitorApp struct {
 // Note:
 // The Controller will requeue the Request to be processed again if the returned error is non-nil or
 // Result.Requeue is true, otherwise upon completion it will remove the work from the queue.
+
+// Reconcile is consistent with the declarative model of Kubernetes -
+// no add, delete, or update methods
+// instead controller passes in current state
+// it is up the this method to decide what to do and then do implement it
+// this method should be idempotent (can running many times without issues)
 func (r *ReconcileVisitorApp) Reconcile(request reconcile.Request) (reconcile.Result, error) {
 	reqLogger := log.WithValues("Request.Namespace", request.Namespace, "Request.Name", request.Name)
 	reqLogger.Info("Reconciling VisitorApp")
 
 	// Fetch the VisitorApp instance
+	// Gets the spec and status fields from the instance
 	instance := &examplev1.VisitorApp{}
+	//r is the reconciler objectwith access to the authenticated client
 	err := r.client.Get(context.TODO(), request.NamespacedName, instance)
 	if err != nil {
 		if errors.IsNotFound(err) {
@@ -152,6 +163,8 @@ func (r *ReconcileVisitorApp) Reconcile(request reconcile.Request) (reconcile.Re
 	*/
 
 	//BEGIN CUSTOM VISITORAPP RECONCILE LOGIC
+
+	// Stores the result of the declarative reconcile operation
 	var result *reconcile.Result
 
 	// == MySQL ==========

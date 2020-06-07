@@ -29,7 +29,7 @@ func frontendServiceName(v *examplev1.VisitorApp) string {
 
 func (r *ReconcileVisitorApp) frontendDeployment(v *examplev1.VisitorApp) *appsv1.Deployment {
 	labels := labels(v, "frontend")
-	size := int32(1)
+	size := int32(1) //there is only 1 deployment for frontend in the kubernetes cluster
 
 	// If the header was specified, add it as an env variable
 	env := []corev1.EnvVar{}

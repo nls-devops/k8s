@@ -12,22 +12,22 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
-func mysqlDeploymentName() string {
-	return "mysql"
+func mysqlDeploymentName(v *examplev1.VisitorApp) string {
+	return v.Name + "-mysql"
 }
 
-func mysqlServiceName() string {
-	return "mysql-service"
+func mysqlServiceName(v *examplev1.VisitorApp) string {
+	return v.Name + "-mysql-service"
 }
 
-func mysqlAuthName() string {
-	return "mysql-auth"
+func mysqlAuthName(v *examplev1.VisitorApp) string {
+	return v.Name + "-mysql-auth"
 }
 
 func (r *ReconcileVisitorApp) mysqlAuthSecret(v *examplev1.VisitorApp) *corev1.Secret {
 	secret := &corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      mysqlAuthName(),
+			Name:      mysqlAuthName(v),
 			Namespace: v.Namespace,
 		},
 		Type: "Opaque",
@@ -42,25 +42,25 @@ func (r *ReconcileVisitorApp) mysqlAuthSecret(v *examplev1.VisitorApp) *corev1.S
 
 func (r *ReconcileVisitorApp) mysqlDeployment(v *examplev1.VisitorApp) *appsv1.Deployment {
 	labels := labels(v, "mysql")
-	size := int32(1)
+	size := int32(1) //should only be 1 deployment
 
 	userSecret := &corev1.EnvVarSource{
 		SecretKeyRef: &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName()},
+			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName(v)},
 			Key:                  "username",
 		},
 	}
 
 	passwordSecret := &corev1.EnvVarSource{
 		SecretKeyRef: &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName()},
+			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName(v)},
 			Key:                  "password",
 		},
 	}
 
 	dep := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      mysqlDeploymentName(),
+			Name:      mysqlDeploymentName(v),
 			Namespace: v.Namespace,
 		},
 		Spec: appsv1.DeploymentSpec{
@@ -113,7 +113,7 @@ func (r *ReconcileVisitorApp) mysqlService(v *examplev1.VisitorApp) *corev1.Serv
 
 	s := &corev1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      mysqlServiceName(),
+			Name:      mysqlServiceName(v),
 			Namespace: v.Namespace,
 		},
 		Spec: corev1.ServiceSpec{
@@ -134,7 +134,7 @@ func (r *ReconcileVisitorApp) isMysqlUp(v *examplev1.VisitorApp) bool {
 	deployment := &appsv1.Deployment{}
 
 	err := r.client.Get(context.TODO(), types.NamespacedName{
-		Name:      mysqlDeploymentName(),
+		Name:      mysqlDeploymentName(v),
 		Namespace: v.Namespace,
 	}, deployment)
 

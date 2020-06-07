@@ -29,18 +29,18 @@ func backendServiceName(v *examplev1.VisitorApp) string {
 
 func (r *ReconcileVisitorApp) backendDeployment(v *examplev1.VisitorApp) *appsv1.Deployment {
 	labels := labels(v, "backend")
-	size := v.Spec.Size
+	size := v.Spec.Size //size is taken from Custom Resource's Spec
 
 	userSecret := &corev1.EnvVarSource{
 		SecretKeyRef: &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName()},
+			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName(v)},
 			Key:                  "username",
 		},
 	}
 
 	passwordSecret := &corev1.EnvVarSource{
 		SecretKeyRef: &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName()},
+			LocalObjectReference: corev1.LocalObjectReference{Name: mysqlAuthName(v)},
 			Key:                  "password",
 		},
 	}
@@ -75,7 +75,7 @@ func (r *ReconcileVisitorApp) backendDeployment(v *examplev1.VisitorApp) *appsv1
 							},
 							{
 								Name:  "MYSQL_SERVICE_HOST",
-								Value: mysqlServiceName(),
+								Value: mysqlServiceName(v),
 							},
 							{
 								Name:      "MYSQL_USERNAME",

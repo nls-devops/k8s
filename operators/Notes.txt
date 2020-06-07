@@ -1,15 +1,19 @@
 1. Install Go for Windows:  https://golang.org/dl/
+
 2. Install Go Extension for Visual Studio Code (and gopls extension)
+
 3. Install Go on Linux: 
     curl -LO https://dl.google.com/go/go1.14.4.linux-amd64.tar.gz
     tar -C /usr/local -xzf go1.14.4.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
+
 4. Install Operator SDK on Linux:
    RELEASE_VERSION=v0.18.0 # Set the release version variable
    curl -LO https://github.com/operator-framework/operator-sdk/releases/download/${RELEASE_VERSION}/operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu 
    chmod +x operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu && sudo mkdir -p /usr/local/bin/ && sudo cp operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu /usr/local/bin/operator-sdk && rm operator-sdk-${RELEASE_VERSION}-x86_64-linux-gnu
+
 5. Create the operator project:
-   [root@rhel3 projects]# operator-sdk new visitorapp-operator --repo=github.com/cburchett/visitorapp-operator
+[root@rhel3 projects]# operator-sdk new visitorapp-operator --repo=github.com/cburchett/visitorapp-operator
 INFO[0000] Creating new Go operator 'visitorapp-operator'.
 INFO[0000] Created go.mod
 INFO[0000] Created tools.go
@@ -91,6 +95,7 @@ INFO[0054] Project validation successful.
 INFO[0054] Project creation complete.
 
 6. yum install tree
+
 7. tree
 [root@rhel3 visitorapp-operator]# tree
 .
@@ -121,13 +126,13 @@ INFO[0054] Project creation complete.
 9 directories, 14 files
 
 8. cd into project directory
+
 9. git add .
 10.  Update git info:
 [root@rhel3 visitorapp-operator]# git config --global user.name "Curtis Burchett"
 [root@rhel3 visitorapp-operator]# git config --global user.email "curtis@burchett.me"
 
 11. Push code to github:
-
 [root@rhel3 visitorapp-operator]# git remote add origin https://github.com/cburchett/visitorapp-operator.git
 [root@rhel3 visitorapp-operator]# git push -u origin master                     Username for 'https://github.com': curtis@burchett.me
 Password for 'https://curtis@burchett.me@github.com':
@@ -143,7 +148,6 @@ Branch master set up to track remote branch master from origin.
 12. Now open Git repo in VSC 
 
 13. Create the API for the operator:
-
 [root@rhel3 visitorapp-operator]# operator-sdk add api --api-version=example.com/v1 --kind=VisitorApp
 INFO[0000] Generating api version example.com/v1 for kind VisitorApp.
 INFO[0000] Created pkg/apis/example/group.go
@@ -160,7 +164,6 @@ INFO[0023] API generation complete.
 INFO[0023] API generation complete.
 
 14. Add Git commit:
-
 [root@rhel3 visitorapp-operator]# git commit -m "Added API"
 [master 04d57b4] Added API
  9 files changed, 256 insertions(+), 6 deletions(-)
@@ -187,7 +190,6 @@ To https://github.com/cburchett/visitorapp-operator.git
 15. Update API files in VSC and push
 
 16.  On linux, get new updates:
-
 [root@rhel3 visitorapp-operator]# git pull
 Username for 'https://github.com': curtis@burchett.me
 Password for 'https://curtis@burchett.me@github.com':
@@ -205,13 +207,11 @@ Fast-forward
  2 files changed, 18 insertions(+)
 
 17. Generate API code:
-
 [root@rhel3 visitorapp-operator]# operator-sdk generate crds
 INFO[0000] Running CRD generator.
 INFO[0000] CRD generation complete.
 
 18. Add to git, Commit to git, and push:
-
 [root@rhel3 visitorapp-operator]# git add .
 [root@rhel3 visitorapp-operator]# git commit -m "Generated APIs"
 [master 84df416] Generated APIs
@@ -248,7 +248,6 @@ To https://github.com/cburchett/visitorapp-operator.git
 19. Automatically made Title as required... fix it in the CRD yaml and push/pulled
 
 20.  Added controller scaffold code:
-
 [root@rhel3 visitorapp-operator]# operator-sdk add controller --api-version=example.com/v1 --kind=VisitorApp
 INFO[0000] Generating controller version example.com/v1 for kind VisitorApp.
 INFO[0000] Created pkg/controller/visitorapp/visitorapp_controller.go
@@ -256,7 +255,6 @@ INFO[0000] Created pkg/controller/add_visitorapp.go
 INFO[0000] Controller generation complete.
 
 21.  Add to git, Commit to git, and push:
-
 [root@rhel3 visitorapp-operator]# git add .
 [root@rhel3 visitorapp-operator]# git commit -m "Added controller"
 [master 4d07d4f] Added controller
@@ -295,7 +293,6 @@ To https://github.com/cburchett/visitorapp-operator.git
 23. On Linux, pull new files
 
 24. Upgrade k8s cluster to v1.16.10 (need at least v1.16.0)
-
 [root@rhel3 visitorapp-operator]# kubectl get nodes
 NAME    STATUS   ROLES    AGE    VERSION
 rhel1   Ready    <none>   271d   v1.16.10
@@ -303,7 +300,6 @@ rhel2   Ready    <none>   271d   v1.16.10
 rhel3   Ready    master   271d   v1.16.10
 
 25. Create CRDs and review:
-
 [root@rhel3 visitorapp-operator]# kubectl apply -f deploy/crds/*_crd.yaml
 customresourcedefinition.apiextensions.k8s.io/visitorapps.example.com created
 [root@rhel3 visitorapp-operator]# kubectl get crds
@@ -409,7 +405,6 @@ Events:  <none>
 [root@rhel3 visitorapp-operator]#
 
 26. Test run the operator:
-
 [root@rhel3 visitorapp-operator]# operator-sdk run local --watch-namespace=default
 INFO[0000] Running the operator locally; watching namespace "default"
 {"level":"info","ts":1591486768.915666,"logger":"cmd","msg":"Operator Version: 0.0.1"}
@@ -457,7 +452,6 @@ INFO[0000] Running the operator locally; watching namespace "default"
 {"level":"info","ts":1591487143.811016,"logger":"controller_visitorapp","msg":"Service Spec","Service.Name":"example-visitorapp-frontend-service"}
 
 27.  Create a CR:
-
 [root@rhel3 visitorapp-operator]# cat deploy/crds/*_cr.yaml
 apiVersion: example.com/v1
 kind: VisitorApp
@@ -478,7 +472,6 @@ visitorapp.example.com/example-visitorapp created
 
 
 28.  MySQL image becomes available:
-
 [root@rhel3 visitorapp-operator]# kubectl get deployments --all-namespaces
 NAMESPACE     NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
 default       example-visitorapp-backend    0/1     1            0           6s
@@ -487,7 +480,6 @@ default       mysql                         1/1     1            1           20s
 kube-system   coredns                       2/2     2            2           271d
 
 29.  Backend image becomes available:
-
 [root@rhel3 visitorapp-operator]# kubectl get deployments --all-namespaces
 NAMESPACE     NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
 default       example-visitorapp-backend    1/1     1            1           34s
@@ -497,7 +489,6 @@ kube-system   coredns                       2/2     2            2           271
 trident       trident-csi                   1/1     1            1           253d
 
 30.  Fronend image becomes available:
-
 [root@rhel3 visitorapp-operator]# kubectl get deployments --all-namespaces
 NAMESPACE     NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
 default       example-visitorapp-backend    1/1     1            1           68s
@@ -507,14 +498,11 @@ kube-system   coredns                       2/2     2            2           271
 trident       trident-csi                   1/1     1            1           253d
 
 31. Review CR:
-
 [root@rhel3 visitorapp-operator]# kubectl get visitorapp
 NAME                 AGE
 example-visitorapp   2m
 
-
 32.  Remove the CR:
-
 [root@rhel3 visitorapp-operator]# kubectl delete -f deploy/crds/*_cr.yaml
 visitorapp.example.com "example-visitorapp" deleted
 [root@rhel3 visitorapp-operator]# kubectl get deployments --all-namespaces
@@ -525,7 +513,6 @@ trident       trident-csi   1/1     1            1           253d
 33.  Stop operator: Ctrl-C  or closed PuTTY
 
 34.  Build operator:
-
 [root@rhel3 visitorapp-operator]# go version
 go version go1.14.4 linux/amd64
 [root@rhel3 visitorapp-operator]# operator-sdk build curtisab/visitorapp-operator:v0.0.1
@@ -569,7 +556,6 @@ INFO[0081] Operator build complete.
 [root@rhel3 visitorapp-operator]#
 
 35. Docker push image to Docker Hub:
-
 [root@rhel3 visitorapp-operator]# docker login
 Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
 Username: curtisab
@@ -600,7 +586,6 @@ kubectl create secret docker-registry regcred --docker-username=curtisab --docke
 39.  On linux, git pull
 
 40.  Create the operator:  
-
 [root@rhel3 visitorapp-operator]# kubectl apply -f deploy/visitorapp_operator.yaml
 customresourcedefinition.apiextensions.k8s.io/visitorapps.example.com created
 role.rbac.authorization.k8s.io/visitorapp-operator created
@@ -610,7 +595,6 @@ secret/regcred created
 deployment.apps/visitorapp-operator created
 
 41.  Verify everything:
-
 [root@rhel3 visitorapp-operator]# kubectl describe role visitorapp-operator
 Name:         visitorapp-operator
 Labels:       <none>
@@ -860,7 +844,6 @@ volumesnapshots.snapshot.storage.k8s.io          2019-09-09T04:25:33Z
 No resources found in default namespace.
 
 42.  Create a CR and verify:
-
 [root@rhel3 visitorapp-operator]# kubectl apply -f deploy/crds/*_cr.yaml
 visitorapp.example.com/example-visitorapp created
 [root@rhel3 visitorapp-operator]# kubectl get visitorapp
@@ -888,6 +871,14 @@ Status:
   Frontend Image:  jdob/visitors-webui:1.0.0
 Events:            <none>
 
+[root@rhel3 crds]# kubectl get deployments
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+example-visitorapp-backend    1/1     1            1           5m
+example-visitorapp-frontend   1/1     1            1           5m
+mysql                         1/1     1            1           5m
+visitorapp-operator           1/1     1            1           5m
+
+
 [root@rhel3 visitorapp-operator]# kubectl get pods
 NAME                                           READY   STATUS    RESTARTS   AGE
 example-visitorapp-backend-748745cb84-89c5z    1/1     Running   0          53s
@@ -902,6 +893,7 @@ kubernetes                            ClusterIP   10.96.0.1        <none>       
 mysql-service                         ClusterIP   None             <none>        3306/TCP            70s
 visitorapp-operator-metrics           ClusterIP   10.103.18.72     <none>        8383/TCP,8686/TCP   11m
 [root@rhel3 visitorapp-operator]#
+
 
 
 
