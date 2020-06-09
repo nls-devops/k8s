@@ -118,13 +118,13 @@ OPTIONS:
     - --snapshot-count=10000
     - --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
 
-5. get members within your etcd cluster:
+5. Get members within your etcd cluster:
 
 [root@rhel3 bin]# ETCDCTL_API=3  ./etcdctl --endpoints=192.168.0.63:2379 --cacert /etc/kubernetes/pki/etcd/server.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key member list
 91a7f0234ef57cfe, started, rhel3, https://192.168.0.63:2380, https://192.168.0.63:2379, false
 
 
-6. get keys within the etcdctl:
+6. Get keys within the etcdctl:
 
 [root@rhel3 bin]# ETCDCTL_API=3  ./etcdctl --endpoints=192.168.0.63:2379 --cacert /etc/kubernetes/pki/etcd/server.crt --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key get / --prefix --keys-only
 /registry/apiextensions.k8s.io/customresourcedefinitions/tridentbackends.trident.netapp.io
