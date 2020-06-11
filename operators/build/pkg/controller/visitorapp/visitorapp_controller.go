@@ -119,7 +119,7 @@ func (r *ReconcileVisitorApp) Reconcile(request reconcile.Request) (reconcile.Re
 	// Fetch the VisitorApp instance
 	// Gets the spec and status fields from the instance
 	instance := &examplev1.VisitorApp{}
-	//r is the reconciler objectwith access to the authenticated client
+	//r is the reconciler object with access to the authenticated client
 	err := r.client.Get(context.TODO(), request.NamespacedName, instance)
 	if err != nil {
 		if errors.IsNotFound(err) {
