@@ -47,7 +47,7 @@
 
 5.  Generate the user certificate using K8s private key and K8s cert:  
 
-    [root@rhel3 pki]# openssl x509 -req -in curtis.csr -CA apiserver.crt -CAkey apiserver.key -CAcreateserial -out curtis.crt -days 365
+    [root@rhel3 pki]# openssl x509 -req -in curtis.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out curtis.crt -days 365
     Signature ok
     subject=/CN=curtis/O=curtis
     Getting CA Private Key
@@ -112,7 +112,7 @@
         namespace: kube-system
         user: kubernetes-admin
     name: kubernetes-admin@kubernetes
-    current-context: curtis@kubernetes
+    current-context: kubernetes-admin@kubernetes
     kind: Config
     preferences: {}
     users:
