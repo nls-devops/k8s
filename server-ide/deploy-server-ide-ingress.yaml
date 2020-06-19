@@ -1,14 +1,14 @@
 # Found here:  https://www.digitalocean.com/community/tutorials/how-to-set-up-the-code-server-cloud-ide-platform-on-digitalocean-kubernetes
 
 # NOTE: THIS REQUIRES AN INGRESS CONTROLLER TO BE CONFIGURED
-# Label Node: kubectl label nodes rhel3 ingress-ready=true
 # Install NGINX Ingress: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 # 
-# Verify:  
+# VERIFY INGRESS CONTROLLER IS RUNNING  
 # POD_NAMESPACE=ingress-nginx
 # POD_NAME=$(kubectl get pods -n $POD_NAMESPACE -l app.kubernetes.io/name=ingress-nginx -o jsonpath='{.items[2].metadata.name}')
 # kubectl exec -it $POD_NAME -n $POD_NAMESPACE -- /nginx-ingress-controller --version
 #
+# AFTER APPLYING THIS YAML, DO THESE:
 # Add code-server.cluster.local to host file mapping to machine desigated in kubectl get ingress -n code-server
 # Open browser to http://code-server.cluster.local:31003 where 31003 is the port used by service/ingress-nginx-controller 
 
